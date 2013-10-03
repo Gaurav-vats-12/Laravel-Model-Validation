@@ -1,6 +1,6 @@
 <?php
 
-use Way\Database\Model;
+use Andreyco\Database\Model;
 use Mockery as m;
 
 class ModelTest extends PHPUnit_Framework_TestCase {
@@ -54,7 +54,7 @@ class ModelTest extends PHPUnit_Framework_TestCase {
 
     public function testGetErrors()
     {
-        $model = m::mock('Way\Database\Model')->makePartial();
+        $model = m::mock('Andreyco\Database\Model')->makePartial();
         $model->setErrors('foo');
 
         $this->assertEquals('foo', $model->getErrors());
@@ -62,7 +62,7 @@ class ModelTest extends PHPUnit_Framework_TestCase {
 
     public function testHasErrors()
     {
-        $model = m::mock('Way\Database\Model')->makePartial();
+        $model = m::mock('Andreyco\Database\Model')->makePartial();
 
         $this->assertFalse($model->hasErrors());
 

@@ -1,5 +1,5 @@
 {
-    "name": "way/database",
+    "name": "andreyco/database",
     "description": "",
     "authors": [
         {
@@ -18,7 +18,7 @@
     },
     "autoload": {
         "psr-0": {
-            "Way\\Database": "src/"
+            "Andreyco\\Database": "src/"
         }
     },
     "minimum-stability": "dev"

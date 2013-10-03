@@ -1,4 +1,4 @@
-<?php namespace Way\Database;
+<?php namespace Andreyco\Database;
 
 use Illuminate\Database\Eloquent\Model as Eloquent;
 use Illuminate\Validation\Validator;
@@ -7,21 +7,28 @@ class Model extends Eloquent {
 
     /**
      * Error message bag
-     * 
+     *
      * @var Illuminate\Support\MessageBag
      */
     protected $errors;
 
     /**
      * Validation rules
-     * 
+     *
      * @var Array
      */
     protected static $rules = array();
 
     /**
+     * Custom validation messages
+     *
+     * @var Array
+     */
+    protected static $messages = array();
+
+    /**
      * Validator instance
-     * 
+     *
      * @var Illuminate\Validation\Validators
      */
     protected $validator;
@@ -51,7 +58,7 @@ class Model extends Eloquent {
      */
     public function validate()
     {
-        $v = $this->validator->make($this->attributes, static::$rules);
+        $v = $this->validator->make($this->attributes, $this->getRules(), $this->getMessages());
 
         if ($v->passes())
         {
@@ -64,8 +71,41 @@ class Model extends Eloquent {
     }
 
     /**
+     * Process defined rules for more flexibility
+     *
+     * @return Array
+     */
+    public function getRules()
+    {
+        if (empty(static::$rules)) {
+            return array();
+        }
+
+        // get the model's ID.
+        $id = $this->getKey() ?: 'NULL';
+
+        // Replace placeholders
+        array_walk(static::$rules, function(&$item) use ($id)
+        {
+            $item = str_ireplace(':id:', $id, $item);
+        });
+
+        return static::$rules;
+    }
+
+    /**
+     * Process defined custom messages for more flexibility
+     *
+     * @return Array
+     */
+    public function getMessages()
+    {
+        return static::$messages;
+    }
+
+    /**
      * Set error message bag
-     * 
+     *
      * @var Illuminate\Support\MessageBag
      */
     protected function setErrors($errors)
