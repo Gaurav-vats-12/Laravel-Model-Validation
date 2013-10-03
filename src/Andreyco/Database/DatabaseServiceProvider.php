@@ -1,4 +1,4 @@
-<?php namespace Way\Database;
+<?php namespace Andreyco\Database;
 
 use Illuminate\Support\ServiceProvider;
 

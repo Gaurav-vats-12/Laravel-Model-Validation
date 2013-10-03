@@ -1,4 +1,4 @@
-<?php namespace Way\Database;
+<?php namespace Andreyco\Database;
 
 use Illuminate\Database\Eloquent\Model as Eloquent;
 use Illuminate\Validation\Validator;
@@ -18,6 +18,13 @@ class Model extends Eloquent {
      * @var Array
      */
     protected static $rules = array();
+
+    /**
+     * Custom validation messages
+     *
+     * @var Array
+     */
+    protected static $messages = array();
 
     /**
      * Validator instance
@@ -51,7 +58,7 @@ class Model extends Eloquent {
      */
     public function validate()
     {
-        $v = $this->validator->make($this->attributes, $this->getRules());
+        $v = $this->validator->make($this->attributes, $this->getRules(), $this->getMessages());
 
         if ($v->passes())
         {
@@ -66,7 +73,7 @@ class Model extends Eloquent {
     /**
      * Process defined rules for more flexibility
      *
-     * @return array
+     * @return Array
      */
     public function getRules()
     {
@@ -84,6 +91,16 @@ class Model extends Eloquent {
         });
 
         return static::$rules;
+    }
+
+    /**
+     * Process defined custom messages for more flexibility
+     *
+     * @return Array
+     */
+    public function getMessages()
+    {
+        return static::$messages;
     }
 
     /**
