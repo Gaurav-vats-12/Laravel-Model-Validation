@@ -112,7 +112,7 @@ class Model extends Eloquent {
      *
      * return Array|Boolean(false)
      */
-    public function hasRules($field) {
+    public static function hasRules($field) {
         return isset(static::$rules[$field]) ? (is_array(static::$rules[$field]) ? static::$rules[$field] : [static::$rules[$field]]) : false;
     }
     
@@ -124,11 +124,11 @@ class Model extends Eloquent {
      *
      * return Boolean
      */
-    public function is($field, $type) {
+    public static function is($field, $type) {
         $is = false;
         
-        if ($this->hasRules($field)) {            
-            foreach ($this->hasRules($field) as $rule)
+        if (static::hasRules($field)) {            
+            foreach (static::hasRules($field) as $rule)
             {
                 if (is_array($type))
                 {
