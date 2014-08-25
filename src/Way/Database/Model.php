@@ -58,6 +58,13 @@ class Model extends Eloquent {
      */
     public function validate()
     {
+         /**
+         * Replace unique's rules for ignore row id
+         */
+        foreach (static::$rules as $field => $rulesString) {
+            static::$rules[$field] = preg_replace('/(unique:([^|,]+))[^|]*/i', '${1},'.$field.','.$this->id, $rulesString);
+        }
+        
         $v = $this->validator->make($this->attributes, static::$rules, static::$messages);
 
         if ($v->passes())
