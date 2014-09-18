@@ -49,7 +49,8 @@ class Model extends Eloquent {
 
         static::saving(function($model)
         {
-            return $model->validate();
+            // Returning true would prevent other event listeners from firing
+            return $model->validate() ? null : false;
         });
     }
 
