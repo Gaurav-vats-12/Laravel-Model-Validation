@@ -51,9 +51,7 @@ class Model extends Eloquent {
 
         static::saving(function($model)
         {
-            // Returning true would prevent other event listeners from firing
-
-            return $model->validate() ? null : false;
+            return $model->validate();
         });
     }
 
@@ -66,8 +64,9 @@ class Model extends Eloquent {
 
         if ($v->passes())
         {
+            // Hashes the attribute value if name ends with _hash
             foreach ($this->attributes as $key => $value) {
-                if ($this->endsWith($key, '_hash'))
+                if (preg_match("/.*(_hash)$/", $key))
                     $this->attributes[$key] = $this->hasher->make($value);
             }
 
@@ -103,16 +102,6 @@ class Model extends Eloquent {
     public function hasErrors()
     {
         return ! empty($this->errors);
-    }
-
-    protected static function endsWith($haystack, $needle)
-    {
-        $length = strlen($needle);
-        if ($length == 0) {
-            return true;
-        }
-
-        return (substr($haystack, -$length) === $needle);
     }
 
 }
