@@ -58,6 +58,15 @@ class Model extends Eloquent {
      */
     public function validate()
     {
+        // if the key's value is greater than 0, then its an existing model
+        // so we will replace the placeholder (:id) with the id value
+        // otherwise we will just replace it with an empty string
+        $replace = ($this->getKey() > 0) ? $this->getKey() : '';
+        foreach (static::$rules as $key => $rule)
+        {
+            static::$rules[$key] = str_replace(':id', $replace, $rule);
+        }
+    
         $v = $this->validator->make($this->attributes, static::$rules, static::$messages);
 
         if ($v->passes())
@@ -95,5 +104,53 @@ class Model extends Eloquent {
     {
         return ! empty($this->errors);
     }
-
+    
+    /**
+     * Check if $field has rules
+     * 
+     * @var String
+     *
+     * return Array|Boolean(false)
+     */
+    public static function hasRules($field) {
+        return isset(static::$rules[$field]) ? (is_array(static::$rules[$field]) ? static::$rules[$field] : [static::$rules[$field]]) : false;
+    }
+    
+    /**
+     * Check if $field has $type rules
+     *
+     * @var String
+     * @var String|Array
+     *
+     * return Boolean
+     */
+    public static function is($field, $type) {
+        $is = false;
+        
+        if (static::hasRules($field)) {            
+            foreach (static::hasRules($field) as $rule)
+            {
+                if (is_array($type))
+                {
+                    foreach ($type as $kind) {
+                        $pos = strpos($rule, $kind);
+                        
+                        if ($pos !== false)
+                        {
+                            $is = true;
+                        }
+                    }
+                } else {                
+                    $pos = strpos($rule, $type);
+                    
+                    if ($pos !== false)
+                    {
+                        $is = true;
+                    }
+                }
+            }
+        }
+        
+        return $is;
+    }
 }
