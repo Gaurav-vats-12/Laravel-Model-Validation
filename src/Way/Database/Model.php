@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Eloquent\Model as Eloquent;
 use Illuminate\Validation\Validator;
+use Illuminate\Hashing\BcryptHasher as Hash;
 
 class Model extends Eloquent {
 
@@ -31,13 +32,14 @@ class Model extends Eloquent {
      * 
      * @var Illuminate\Validation\Validators
      */
-    protected $validator;
+    protected $validator, $hasher;
 
-    public function __construct(array $attributes = array(), Validator $validator = null)
+    public function __construct(array $attributes = array(), Validator $validator = null, Hash $hasher = null)
     {
         parent::__construct($attributes);
 
         $this->validator = $validator ?: \App::make('validator');
+        $this->hasher = $hasher ?: \App::make('hash');
     }
 
     /**
@@ -62,6 +64,12 @@ class Model extends Eloquent {
 
         if ($v->passes())
         {
+            // Hashes the attribute value if name ends with _hash
+            foreach ($this->attributes as $key => $value) {
+                if (preg_match("/.*(_hash)$/", $key))
+                    $this->attributes[$key] = $this->hasher->make($value);
+            }
+
             return true;
         }
 
