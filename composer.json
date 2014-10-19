@@ -14,12 +14,11 @@
         "illuminate/validation": "~4.1"
     },
     "require-dev": {
-        "mockery/mockery": "dev-master"
+        "mockery/mockery": "~0.9"
     },
     "autoload": {
         "psr-0": {
             "Way\\Database": "src/"
         }
-    },
-    "minimum-stability": "stable"
+    }
 }
