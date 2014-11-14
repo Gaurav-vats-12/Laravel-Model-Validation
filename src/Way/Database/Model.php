@@ -49,7 +49,7 @@ class Model extends Eloquent {
 
         static::saving(function($model)
         {
-            return $model->validate();
+            return ($model->validate() === false) ? false : null;
         });
     }
 
