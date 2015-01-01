@@ -13,6 +13,13 @@ class Model extends Eloquent {
     protected $errors;
 
     /**
+     * Input for validation
+     * 
+     * @var Array
+     */
+    protected $input;
+
+    /**
      * Validation rules
      * 
      * @var Array
@@ -33,10 +40,11 @@ class Model extends Eloquent {
      */
     protected $validator;
 
-    public function __construct(array $attributes = array(), Validator $validator = null)
+    public function __construct(array $input = array(), Validator $validator = null)
     {
-        parent::__construct($attributes);
-
+        parent::__construct($input);
+        
+        $this->input = $input;
         $this->validator = $validator ?: \App::make('validator');
     }
 
@@ -58,7 +66,7 @@ class Model extends Eloquent {
      */
     public function validate()
     {
-        $v = $this->validator->make($this->attributes, static::$rules, static::$messages);
+        $v = $this->validator->make($this->input, static::$rules, static::$messages);
 
         if ($v->passes())
         {
