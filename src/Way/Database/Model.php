@@ -29,7 +29,7 @@ class Model extends Eloquent {
     /**
      * Validator instance
      * 
-     * @var Illuminate\Validation\Validators
+     * @var Illuminate\Validation\Validator
      */
     protected $validator;
 
