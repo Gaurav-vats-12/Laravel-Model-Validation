@@ -2,6 +2,7 @@
 This package takes care of the model validation process for you. Rather than manually going through the tedious `Validator::make(...)` process, just save the model, and this package will handle the rest.
 
 ## Usage
+
 Install the package through Composer.
 
 ```js
